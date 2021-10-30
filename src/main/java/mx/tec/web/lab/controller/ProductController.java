@@ -43,7 +43,7 @@ import mx.tec.web.lab.vo.ProductVO;
  * @version 1.0
  */
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins = "${client.url}")
 @RequestMapping("/ecom/api/v1")
 @Validated
 public class ProductController {
