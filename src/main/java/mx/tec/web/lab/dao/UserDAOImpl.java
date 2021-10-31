@@ -34,7 +34,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsService {
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(final String username) {
 		Optional<User> user = userRepository.findByUsername(username);
-		if (user.isEmpty()) {
+		if (!user.isPresent()) {
 			throw new UsernameNotFoundException(username);
 		}
 
