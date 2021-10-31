@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,10 +47,10 @@ public class UserController {
 		return ResponseEntity.ok(securityManager.authenticate(credentials));		
 	}
 	
-    @ExceptionHandler(SecurityException.class)
-    public ResponseEntity<String> onSecurityException(final SecurityException se) {
-    	log.error("Invalid credentials", se);
-        return new ResponseEntity<>(se.getMessage(), HttpStatus.UNAUTHORIZED);
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> onSecurityException(final AuthenticationException ae) {
+    	log.error("Invalid credentials", ae);
+        return new ResponseEntity<>(ae.getMessage(), HttpStatus.UNAUTHORIZED);
     }
     
     @ExceptionHandler(EntityExistsException.class)
