@@ -23,15 +23,15 @@ public class SecurityManager {
 	@Resource
 	SecurityHelper securityHelper;
 	
-	//@Resource
-	//AuthenticationManager authenticationManager;
+	@Resource
+	AuthenticationManager authenticationManager;
 	
 	@Resource
 	JsonWebTokenUtil jwtTokenUtil;
 	
 	public JsonWebTokenVO authenticate(CredentialsVO credentials) throws SecurityException {
 		try {
-			//authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
 			
 			final UserDetails userDetails = userDAO.loadUserByUsername(credentials.getUsername());
 			return new JsonWebTokenVO(jwtTokenUtil.generateToken(userDetails));
