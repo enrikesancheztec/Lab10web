@@ -7,6 +7,10 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.persistence.EntityExistsException;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import mx.tec.web.lab.util.SecurityHelper;
@@ -43,5 +47,4 @@ public class UserManager {
 			return userDAO.insert(user);
 		}
 	}
-
 }

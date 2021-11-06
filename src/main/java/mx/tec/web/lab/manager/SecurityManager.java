@@ -1,5 +1,7 @@
 package mx.tec.web.lab.manager;
 
+import java.util.Optional;
+
 import javax.annotation.Resource;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,8 +9,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import mx.tec.web.lab.util.JsonWebTokenUtil;
@@ -31,4 +35,18 @@ public class SecurityManager {
 		final UserDetails userDetails = userDAO.loadUserByUsername(credentials.getUsername());
 		return new JsonWebTokenVO(jwtTokenUtil.generateToken(userDetails));
 	}
+	
+	
+	public Optional<UsernamePasswordAuthenticationToken> authenticate(final String username, final String token) {
+		Optional<UsernamePasswordAuthenticationToken> authenticationToken = Optional.empty();
+		UserDetails userDetails = userDAO.loadUserByUsername(username);
+
+		if (jwtTokenUtil.validateToken(token, userDetails)) {
+			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+					userDetails, null, userDetails.getAuthorities());
+			authenticationToken = Optional.of(usernamePasswordAuthenticationToken);
+		}
+
+		return authenticationToken;
+	}	
 }

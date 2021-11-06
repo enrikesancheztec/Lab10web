@@ -35,13 +35,13 @@ public class UserController {
 	@Resource
 	private SecurityManager securityManager;	
 	
-	@PostMapping("/user")
+	@PostMapping("/public/user")
 	public ResponseEntity<UserVO> addUser(@RequestBody UserVO user) {
 		log.info("Adding user {}", user.getUsername());
 		return new ResponseEntity<>(userManager.addUser(user), HttpStatus.CREATED);
 	}	
 	
-	@PostMapping("/authenticate")
+	@PostMapping("/public/authenticate")
 	public ResponseEntity<JsonWebTokenVO> createAuthenticationToken(@RequestBody CredentialsVO credentials) {
 		log.info("Authenticating user {}", credentials.getUsername());		
 		return ResponseEntity.ok(securityManager.authenticate(credentials));		
