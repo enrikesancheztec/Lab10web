@@ -34,9 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()
 		.authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/ecom/api/v1/public/**").permitAll()
-		.antMatchers("/ecom/api/v1/secured/**").hasAuthority(RoleEnum.USER.getName())
-		.antMatchers("/ecom/api/v1/admin/**").hasAuthority(RoleEnum.ADMIN.getName())
+		.antMatchers(HttpMethod.POST, "/ecom/api/v1/user", "/ecom/api/v1/authenticate").permitAll()
 		.anyRequest().authenticated()
 		.and().exceptionHandling()
 		.authenticationEntryPoint(jsonWebTokenAuthenticationEntryPoint)

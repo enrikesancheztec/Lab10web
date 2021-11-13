@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -57,7 +58,8 @@ public class ProductController {
 	 * The end point for GET {url}/products
 	 * @return a json list of all the products
 	 */
-	@GetMapping("/secured/products")
+	@GetMapping("/products")
+	@PreAuthorize("hasAuthority('User')")
 	public ResponseEntity<List<ProductVO>> getProducts() {
 		log.debug("Getting all the products");
 		List<ProductVO> products = productManager.getProducts();
@@ -69,7 +71,8 @@ public class ProductController {
 	 * @param id Product id
 	 * @return a json containing the product info and status 200 if the product is found or status 204 if the product is not found
 	 */
-	@GetMapping("/secured/products/{id}")
+	@GetMapping("/products/{id}")
+	@PreAuthorize("hasAuthority('User')")
 	public ResponseEntity<ProductVO> getProduct(@PathVariable(value = "id") @Min(value = 0, message = "The id must be positive") long id) {
 		log.debug("Getting the product by id: {}", id);
 		ResponseEntity<ProductVO> responseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -89,7 +92,8 @@ public class ProductController {
 	 * @param search Pattern to search
 	 * @return a json list of all the products matching the pattern
 	 */
-	@GetMapping(value="/secured/products", params="search")
+	@GetMapping(value="/products", params="search")
+	@PreAuthorize("hasAuthority('User')")
 	public ResponseEntity<List<ProductVO>> getProducts(@RequestParam String search) {
 		List<ProductVO> products = productManager.getProducts(search);
 		return new ResponseEntity<>(products, HttpStatus.OK);
@@ -100,7 +104,8 @@ public class ProductController {
 	 * @param newProduct a json containing the info for the new product
 	 * @return If the product is created successfully then status 201 and the product info is returned, otherwise it returns status 400 
 	 */
-	@PostMapping("/admin/products")
+	@PostMapping("/products")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<ProductVO> addProduct(@Valid @RequestBody ProductVO newProduct) {
 		ProductVO product = productManager.addProduct(newProduct);		
 		return new ResponseEntity<>(product, HttpStatus.CREATED);
@@ -112,7 +117,8 @@ public class ProductController {
 	 * @param modifiedProduct a json containing the info for the modified product
 	 * @return status 200 if the product is found and updated or status 204 if the product is not found
 	 */
-	@PutMapping("/admin/products/{id}")
+	@PutMapping("/products/{id}")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<ProductVO> updateProduct(@PathVariable(value = "id") long id, @RequestBody ProductVO modifiedProduct) {
 		ResponseEntity<ProductVO> responseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		Optional<ProductVO> product = productManager.getProduct(id);
@@ -130,7 +136,8 @@ public class ProductController {
 	 * @param id Product id
 	 * @return status 200 if the product is found and deleted or status 204 if the product is not found
 	 */
-	@DeleteMapping("/admin/products/{id}")
+	@DeleteMapping("/products/{id}")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<ProductVO> deleteProduct(@PathVariable(value = "id") long id) {
 		ResponseEntity<ProductVO> responseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		Optional<ProductVO> product = productManager.getProduct(id);
