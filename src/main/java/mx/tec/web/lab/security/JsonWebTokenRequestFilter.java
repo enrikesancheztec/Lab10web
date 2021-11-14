@@ -57,7 +57,6 @@ public class JsonWebTokenRequestFilter extends OncePerRequestFilter {
 			if (authenticationToken.isPresent()) {
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = authenticationToken.get();
 				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				usernamePasswordAuthenticationToken.setAuthenticated(true);
 				
 				log.info("User authenticated with token");
 				
