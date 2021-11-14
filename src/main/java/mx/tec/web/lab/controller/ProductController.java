@@ -93,7 +93,7 @@ public class ProductController {
 	 * @return a json list of all the products matching the pattern
 	 */
 	@GetMapping(value="/products", params="search")
-	//@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('User')")
 	public ResponseEntity<List<ProductVO>> getProducts(@RequestParam String search) {
 		List<ProductVO> products = productManager.getProducts(search);
 		return new ResponseEntity<>(products, HttpStatus.OK);
