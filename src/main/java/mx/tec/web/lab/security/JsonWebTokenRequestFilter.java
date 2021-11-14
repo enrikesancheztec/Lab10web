@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,6 +23,8 @@ import mx.tec.web.lab.manager.SecurityManager;
 
 @Component
 public class JsonWebTokenRequestFilter extends OncePerRequestFilter {
+	private static final Logger log = LoggerFactory.getLogger(JsonWebTokenRequestFilter.class);
+	
 	@Autowired
 	private SecurityManager securityManager;
 	
@@ -53,7 +57,10 @@ public class JsonWebTokenRequestFilter extends OncePerRequestFilter {
 			if (authenticationToken.isPresent()) {
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = authenticationToken.get();
 				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
+				usernamePasswordAuthenticationToken.setAuthenticated(true);
+				
+				log.info("User authenticated with token");
+				
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
 		}
