@@ -47,7 +47,7 @@ public class SecurityManager {
 			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 					userDetails, null, userDetails.getAuthorities());
 			authenticationToken = Optional.of(usernamePasswordAuthenticationToken);
-			log.info("Token for user {} is valid", username);
+			log.info("Token for user {} is valid with details {}", username, userDetails);
 		}
 
 		return authenticationToken;

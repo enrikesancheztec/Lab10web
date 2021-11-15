@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,12 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.tec.web.lab.entity.Role;
 import mx.tec.web.lab.entity.User;
+import mx.tec.web.lab.manager.SecurityManager;
 import mx.tec.web.lab.mapper.UserMapper;
 import mx.tec.web.lab.repository.UserRepository;
 import mx.tec.web.lab.vo.UserVO;
 
 @Component
 public class UserDAOImpl implements UserDAO, UserDetailsService {
+	private static final Logger log = LoggerFactory.getLogger(UserDAOImpl.class);
+	
 	/** A reference to the User Repository */
 	@Resource
 	private UserRepository userRepository;
@@ -41,6 +46,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsService {
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
 		User foundUser = user.get();
+		log.info("Loading user {}", foundUser);
 		
 		for (Role role : foundUser.getRoles()) {
 			grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
