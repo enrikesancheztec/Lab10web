@@ -59,7 +59,7 @@ public class ProductController {
 	 * @return a json list of all the products
 	 */
 	@GetMapping("/products")
-	@PreAuthorize("hasRole('User')")
+	@PreAuthorize("hasAuthority('User')")
 	public ResponseEntity<List<ProductVO>> getProducts() {
 		log.debug("Getting all the products");
 		List<ProductVO> products = productManager.getProducts();
